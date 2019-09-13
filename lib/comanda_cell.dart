@@ -47,6 +47,7 @@ class _ComandaCellState extends State<ComandaCell> {
                           TextField(
                             decoration: InputDecoration(
                                 hintText: "Produto",
+                                filled: true
                             ),
                             onChanged: (String value){
                               setState(() {
@@ -56,7 +57,8 @@ class _ComandaCellState extends State<ComandaCell> {
                           ),
                           TextField(
                             decoration: InputDecoration(
-                                hintText: "Preço"
+                                hintText: "Preço",
+                                filled: true
                             ),
                             onChanged: (String value){
                               setState(() {
@@ -66,7 +68,8 @@ class _ComandaCellState extends State<ComandaCell> {
                           ),
                           TextField(
                             decoration: InputDecoration(
-                                hintText: "Quantidade"
+                                hintText: "Quantidade",
+                                filled: true
                             ),
                             onChanged: (String value){
                               setState(() {
@@ -83,6 +86,10 @@ class _ComandaCellState extends State<ComandaCell> {
                             setState(() {
                               widget.products.add(Product(produtBuffer, priceBuffer, amountBuffer));
                             });
+                            produtBuffer = null;
+                            priceBuffer = null;
+                            amountBuffer = null;
+                            Navigator.pop(context);
                           } : null,
                         )
                       ],
