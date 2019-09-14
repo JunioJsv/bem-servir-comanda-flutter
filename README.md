@@ -1,1 +1,1 @@
-[![Codemagic build status](https://api.codemagic.io/apps/5d7be611ef074c12fea7073e/5d7be611ef074c12fea7073d/status_badge.svg)](https://codemagic.io/apps/5d7be611ef074c12fea7073e/5d7be611ef074c12fea7073d/latest_build)
+# Bem Servir Comanda
