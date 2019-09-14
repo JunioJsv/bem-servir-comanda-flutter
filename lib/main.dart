@@ -79,7 +79,6 @@ class _ComandaState extends State<Comanda> {
             setState(() {
               comandas.remove(comandas[currentComanda]);
               if(currentComanda > 0) currentComanda = comandas.length - 1 < currentComanda ? currentComanda - 1 : currentComanda;
-              print(currentComanda);
             });
           } : null)
         ],
@@ -96,7 +95,6 @@ class _ComandaState extends State<Comanda> {
               setState(() {
                 currentComanda = page;
               });
-              print(page);
             },
           ),
           Align(

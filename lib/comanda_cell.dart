@@ -41,8 +41,8 @@ class _ComandaCellState extends State<ComandaCell> {
                   context: context,
                   builder: (BuildContext ctx) {
                     return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
+                      title: Text("Adicionar produto"),
+                      content: Wrap(
                         children: <Widget>[
                           TextField(
                             decoration: InputDecoration(
