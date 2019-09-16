@@ -1,4 +1,4 @@
-package juniojsv.bem_servir_comanda
+package juniojsv.comanda
 
 import android.os.Bundle
 

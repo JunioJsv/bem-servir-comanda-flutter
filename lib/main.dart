@@ -35,6 +35,7 @@ class _ComandaState extends State<Comanda> {
     title = comandas.length > 0 ? comandas[currentComanda].client : "Comanda";
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
@@ -42,33 +43,58 @@ class _ComandaState extends State<Comanda> {
             showDialog(
               context: context,
               builder: (BuildContext ctx) {
-                return AlertDialog(
-                  title: Text("Nova comanda"),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("Adicionar"),
-                      onPressed: clientBuffer != null && clientBuffer.isNotEmpty ? (){
-                        setState(() {
-                          comandas.add(ComandaCell(
-                            key: UniqueKey(),
-                            client: clientBuffer
-                          ));
-                          currentComanda = comandas.length - 1;
-                          clientBuffer = null;
-                          Navigator.pop(context);
-                        });
-                      } : null,
-                    )
-                  ],
-                  content: TextField(
-                    onChanged: (String value) {
-                      setState(() {
-                        clientBuffer = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                        hintText: "Cliente",
-                        filled: true
+                return Align(
+                  alignment: Alignment.center,
+                  child: Card(
+                    margin: EdgeInsets.only(
+                        left: 48,
+                        right: 48
+                    ),
+                    elevation: 8.0,
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextField(
+                            onChanged: (String value) {
+                                clientBuffer = value;
+                            },
+                            decoration: InputDecoration(
+                                hintText: "Cliente",
+                                filled: true
+                            ),
+                          ),
+                          FlatButton(
+                            textColor: theme.accentColor,
+                            child: Text("Adicionar"),
+                            onPressed: () {
+                              if(clientBuffer != null && clientBuffer.isNotEmpty) {
+                                setState(() {
+                                  comandas.add(ComandaCell(
+                                    key: UniqueKey(),
+                                    client: clientBuffer,
+                                  ));
+                                  clientBuffer = null;
+                                  currentComanda = comandas.length - 1;
+                                  Navigator.pop(context);
+                                });
+                              }
+                            }
+//                            clientBuffer != null && clientBuffer.isNotEmpty ? (){
+//                              setState(() {
+//                                comandas.add(ComandaCell(
+//                                    key: UniqueKey(),
+//                                    client: clientBuffer
+//                                ));
+//                                currentComanda = comandas.length - 1;
+//                                clientBuffer = null;
+//                                Navigator.pop(context);
+//                              });
+//                            } : null,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
