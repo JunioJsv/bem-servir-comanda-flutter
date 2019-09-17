@@ -1,6 +1,6 @@
+import 'package:bem_servir_comanda/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bem_servir_comanda/main.dart';
 
 class Product {
   String product;
@@ -31,21 +31,33 @@ class _ProductCellState extends State<ProductCell> {
           Container(
             child: Row(
               children: <Widget>[
-                Card(
-                  color: Colors.white,
-                  elevation: 4,
-                  child: Container(
-                    height: 48,
-                    width: 48,
-                    alignment: Alignment.center,
-                    child: Text(
-                      "${widget.product.amount}",
-                      style: TextStyle(
-                          fontSize: 24,
-                          color: theme.accentColor
+                GestureDetector(
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 4,
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      alignment: Alignment.center,
+                      child: Text(
+                        "${widget.product.amount}",
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: theme.accentColor
+                        ),
                       ),
                     ),
                   ),
+                  onDoubleTap: () {
+                    setState(() {
+                      widget.product.amount++;
+                    });
+                  },
+                  onLongPress: () {
+                    setState(() {
+                      if(widget.product.amount > 1) widget.product.amount--;
+                    });
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.all(8),
