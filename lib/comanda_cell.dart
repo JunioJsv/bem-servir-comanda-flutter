@@ -57,7 +57,7 @@ class _ComandaCellState extends State<ComandaCell> {
                   context: context,
                   builder: (BuildContext ctx) {
                     return Align(
-                      alignment: Alignment.center,
+                      alignment: Alignment.topCenter,
                       child: Card(
                         margin: EdgeInsets.only(
                           left: 48,

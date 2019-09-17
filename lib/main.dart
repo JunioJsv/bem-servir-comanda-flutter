@@ -44,7 +44,7 @@ class _ComandaState extends State<Comanda> {
               context: context,
               builder: (BuildContext ctx) {
                 return Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.topCenter,
                   child: Card(
                     margin: EdgeInsets.only(
                         left: 48,
@@ -81,17 +81,6 @@ class _ComandaState extends State<Comanda> {
                                 });
                               }
                             }
-//                            clientBuffer != null && clientBuffer.isNotEmpty ? (){
-//                              setState(() {
-//                                comandas.add(ComandaCell(
-//                                    key: UniqueKey(),
-//                                    client: clientBuffer
-//                                ));
-//                                currentComanda = comandas.length - 1;
-//                                clientBuffer = null;
-//                                Navigator.pop(context);
-//                              });
-//                            } : null,
                           )
                         ],
                       ),

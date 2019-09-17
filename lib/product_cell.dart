@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:bem_servir_comanda/main.dart';
 
 class Product {
   String product;
@@ -7,6 +8,7 @@ class Product {
   int amount;
   Product(this.product, this.price, this.amount);
 }
+
 class ProductCell extends StatefulWidget {
   Product product;
 
@@ -37,10 +39,10 @@ class _ProductCellState extends State<ProductCell> {
                     width: 48,
                     alignment: Alignment.center,
                     child: Text(
-                      "x${widget.product.amount}",
+                      "${widget.product.amount}",
                       style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.grey[600]
+                          fontSize: 24,
+                          color: theme.accentColor
                       ),
                     ),
                   ),
@@ -52,7 +54,9 @@ class _ProductCellState extends State<ProductCell> {
                     children: <Widget>[
                       Text(
                         widget.product.product,
-                        //style: TextStyle(),
+                        style: TextStyle(
+                          fontSize: 16
+                        ),
                       ),
                       Text(
                           "R\$${widget.product.price.toStringAsFixed(2)}",
@@ -64,11 +68,25 @@ class _ProductCellState extends State<ProductCell> {
               ],
             ),
           ),
-          Text(
-            "R\$${(widget.product.price*widget.product.amount).toStringAsFixed(2)}",
-            style: TextStyle(
-                fontSize: 32,
-                color: Colors.grey[600]
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "R\$",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: theme.primaryColor
+                  ),
+                ),
+                Text(
+                  "${(widget.product.price*widget.product.amount).toStringAsFixed(2)}",
+                  style: TextStyle(
+                      fontSize: 32,
+                      color: theme.primaryColor
+                  ),
+                )
+              ],
             ),
           )
         ],
