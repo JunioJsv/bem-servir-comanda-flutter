@@ -9,13 +9,11 @@ class ComandaCell extends StatefulWidget {
 
   ComandaCell({@required key, this.client}) : super(key: key);
 
-
   @override
   _ComandaCellState createState() => _ComandaCellState();
 }
 
 class _ComandaCellState extends State<ComandaCell> {
-
   String produtBuffer;
   double priceBuffer;
   int amountBuffer;
@@ -25,11 +23,9 @@ class _ComandaCellState extends State<ComandaCell> {
     return Stack(
       children: <Widget>[
         ListView.builder(
-          padding: EdgeInsets.only(
-            bottom: 84
-          ),
+          padding: EdgeInsets.only(bottom: 84),
           itemCount: widget.products != null ? widget.products.length : 0,
-          itemBuilder: (BuildContext context, int index){
+          itemBuilder: (BuildContext context, int index) {
             return Dismissible(
               onDismissed: (direction) {
                 setState(() {
@@ -54,73 +50,65 @@ class _ComandaCellState extends State<ComandaCell> {
               child: Icon(Icons.plus_one),
               onPressed: () {
                 showDialog(
-                  context: context,
-                  builder: (BuildContext ctx) {
-                    return Align(
-                      alignment: Alignment.topCenter,
-                      child: Card(
-                        margin: EdgeInsets.only(
-                          left: 48,
-                          right: 48
-                        ),
-                        elevation: 8.0,
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              TextField(
-                                decoration: InputDecoration(
-                                    hintText: "Produto",
-                                    filled: true
-                                ),
-                                onChanged: (String value){
-                                  produtBuffer = value;
-                                },
+                    context: context,
+                    builder: (BuildContext ctx) {
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: Card(
+                            margin: EdgeInsets.only(left: 48, right: 48),
+                            elevation: 8.0,
+                            child: Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        hintText: "Produto", filled: true),
+                                    onChanged: (String value) {
+                                      produtBuffer = value;
+                                    },
+                                  ),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        hintText: "Preço", filled: true),
+                                    onChanged: (String value) {
+                                      priceBuffer = double.parse(value);
+                                    },
+                                  ),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        hintText: "Quantidade", filled: true),
+                                    onChanged: (String value) {
+                                      amountBuffer = int.parse(value);
+                                    },
+                                  ),
+                                  FlatButton(
+                                      textColor: theme.accentColor,
+                                      child: Text("Adicionar"),
+                                      onPressed: () {
+                                        if (produtBuffer != null &&
+                                            priceBuffer != null &&
+                                            amountBuffer != null) {
+                                          setState(() {
+                                            widget.products.add(Product(
+                                                produtBuffer,
+                                                priceBuffer,
+                                                amountBuffer));
+                                            produtBuffer = null;
+                                            priceBuffer = null;
+                                            amountBuffer = null;
+                                            Navigator.pop(context);
+                                          });
+                                        }
+                                      })
+                                ],
                               ),
-                              TextField(
-                                decoration: InputDecoration(
-                                    hintText: "Preço",
-                                    filled: true
-                                ),
-                                onChanged: (String value){
-                                  priceBuffer = double.parse(value);
-                                },
-                              ),
-                              TextField(
-                                decoration: InputDecoration(
-                                    hintText: "Quantidade",
-                                    filled: true
-                                ),
-                                onChanged: (String value){
-                                  amountBuffer = int.parse(value);
-                                },
-                              ),
-                              FlatButton(
-                                textColor: theme.accentColor,
-                                  child: Text("Adicionar"),
-                                  onPressed: () {
-                                    if(produtBuffer != null && priceBuffer != null && amountBuffer != null) {
-                                      setState(() {
-                                        widget.products.add(Product(produtBuffer, priceBuffer, amountBuffer));
-                                        produtBuffer = null;
-                                        priceBuffer = null;
-                                        amountBuffer = null;
-                                        Navigator.pop(context);
-                                      });
-                                    }
-                                  }
-                              )
-                            ],
-                          ),
-                        )
-                      ),
-                    );
-                  }
-                );
+                            )),
+                      );
+                    });
               },
-            )
-        )
+            ))
       ],
     );
   }

@@ -19,7 +19,6 @@ class ProductCell extends StatefulWidget {
 }
 
 class _ProductCellState extends State<ProductCell> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,10 +40,8 @@ class _ProductCellState extends State<ProductCell> {
                       alignment: Alignment.center,
                       child: Text(
                         "${widget.product.amount}",
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: theme.accentColor
-                        ),
+                        style:
+                            TextStyle(fontSize: 24, color: theme.accentColor),
                       ),
                     ),
                   ),
@@ -55,7 +52,7 @@ class _ProductCellState extends State<ProductCell> {
                   },
                   onLongPress: () {
                     setState(() {
-                      if(widget.product.amount > 1) widget.product.amount--;
+                      if (widget.product.amount > 1) widget.product.amount--;
                     });
                   },
                 ),
@@ -66,14 +63,10 @@ class _ProductCellState extends State<ProductCell> {
                     children: <Widget>[
                       Text(
                         widget.product.product,
-                        style: TextStyle(
-                          fontSize: 16
-                        ),
+                        style: TextStyle(fontSize: 16),
                       ),
-                      Text(
-                          "R\$${widget.product.price.toStringAsFixed(2)}",
-                          style: TextStyle(color: Colors.grey[600])
-                      )
+                      Text("R\$${widget.product.price.toStringAsFixed(2)}",
+                          style: TextStyle(color: Colors.grey[600]))
                     ],
                   ),
                 )
@@ -86,17 +79,11 @@ class _ProductCellState extends State<ProductCell> {
               children: <Widget>[
                 Text(
                   "R\$",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: theme.primaryColor
-                  ),
+                  style: TextStyle(fontSize: 16, color: theme.primaryColor),
                 ),
                 Text(
-                  "${(widget.product.price*widget.product.amount).toStringAsFixed(2)}",
-                  style: TextStyle(
-                      fontSize: 32,
-                      color: theme.primaryColor
-                  ),
+                  "${(widget.product.price * widget.product.amount).toStringAsFixed(2)}",
+                  style: TextStyle(fontSize: 32, color: theme.primaryColor),
                 )
               ],
             ),
