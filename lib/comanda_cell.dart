@@ -1,6 +1,8 @@
 import 'package:bem_servir_comanda/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 import 'product_cell.dart';
 
 class ComandaCell extends StatefulWidget {
@@ -11,6 +13,19 @@ class ComandaCell extends StatefulWidget {
 
   @override
   _ComandaCellState createState() => _ComandaCellState();
+
+  void share() {
+    var _total = 0.0;
+    var body = "<CENTER><BIG>${client.toUpperCase()}";
+    body += "\nData : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
+    products.forEach((Product product) {
+      body +=
+          "\n[${product.amount}] - ${product.product} - ${(product.amount * product.price).toStringAsFixed(2)}";
+      _total += product.amount * product.price;
+    });
+    body += "\n<MEDIUM2>TOTAL: R\$${_total.toStringAsFixed(2)}\n\n";
+    Share.share(body);
+  }
 }
 
 class _ComandaCellState extends State<ComandaCell> {
@@ -23,7 +38,7 @@ class _ComandaCellState extends State<ComandaCell> {
     return Stack(
       children: <Widget>[
         ListView.builder(
-          padding: EdgeInsets.only(bottom: 84),
+          padding: EdgeInsets.only(bottom: 96),
           itemCount: widget.products != null ? widget.products.length : 0,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
