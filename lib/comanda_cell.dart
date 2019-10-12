@@ -17,13 +17,13 @@ class ComandaCell extends StatefulWidget {
   void share() {
     var _total = 0.0;
     var body = "<CENTER><BIG>${client.toUpperCase()}";
-    body += "\nData : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
+    body += "<BR>Data : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
     products.forEach((Product product) {
       body +=
-          "\n[${product.amount}] - ${product.product} - ${(product.amount * product.price).toStringAsFixed(2)}";
+          "<BR>${product.amount} - ${product.product} - ${(product.amount * product.price).toStringAsFixed(2)}";
       _total += product.amount * product.price;
     });
-    body += "\n<MEDIUM2>TOTAL: R\$${_total.toStringAsFixed(2)}\n\n";
+    body += "<BR><MEDIUM2>TOTAL: R\$${_total.toStringAsFixed(2)}<BR><BR>";
     Share.share(body);
   }
 }

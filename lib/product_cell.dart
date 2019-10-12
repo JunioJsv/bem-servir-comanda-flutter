@@ -30,10 +30,18 @@ class _ProductCellState extends State<ProductCell> {
           Container(
             child: Row(
               children: <Widget>[
-                GestureDetector(
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 4,
+                Card(
+                  child: InkWell(
+                    onDoubleTap: () {
+                      setState(() {
+                        widget.product.amount++;
+                      });
+                    },
+                    onLongPress: () {
+                      setState(() {
+                        if (widget.product.amount > 1) widget.product.amount--;
+                      });
+                    },
                     child: Container(
                       height: 48,
                       width: 48,
@@ -45,16 +53,6 @@ class _ProductCellState extends State<ProductCell> {
                       ),
                     ),
                   ),
-                  onDoubleTap: () {
-                    setState(() {
-                      widget.product.amount++;
-                    });
-                  },
-                  onLongPress: () {
-                    setState(() {
-                      if (widget.product.amount > 1) widget.product.amount--;
-                    });
-                  },
                 ),
                 Padding(
                   padding: EdgeInsets.all(8),

@@ -122,7 +122,7 @@ class _ComandaState extends State<Comanda> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(8),
                   child: DotsIndicator(
                     dotsCount: comandas.length,
                     position: currentPage,
