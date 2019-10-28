@@ -1,129 +1,157 @@
-import 'package:bem_servir_comanda/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
+import 'main.dart';
 import 'product_cell.dart';
 
-class ComandaCell extends StatefulWidget {
+void createComandaCell(
+    BuildContext buildContext, Function(ComandaCell) callBack) {
   String client;
-  List<Product> products = new List<Product>();
+
+  showDialog(
+    context: buildContext,
+    builder: (context) => Align(
+      alignment: Alignment.topCenter,
+      child: Card(
+        margin: EdgeInsets.only(left: 48, right: 48),
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(hintText: "Cliente", filled: true),
+                onChanged: (input) {
+                  client = input;
+                },
+              ),
+              FlatButton(
+                onPressed: () {
+                  if (client.isNotEmpty) {
+                    callBack(
+                      ComandaCell(
+                        key: UniqueKey(),
+                        client: client,
+                      ),
+                    );
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text(
+                  "Adicionar",
+                  style: TextStyle(color: theme.accentColor),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+class ComandaCell extends StatefulWidget {
+  String client = "";
+  List<Product> products = <Product>[];
+  bool taxa = false;
 
   ComandaCell({@required key, this.client}) : super(key: key);
 
   @override
   _ComandaCellState createState() => _ComandaCellState();
 
-  void share() {
-    var _total = 0.0;
-    var body = "<CENTER><BIG>${client.toUpperCase()}";
-    body += "<BR>Data : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
-    products.forEach((Product product) {
-      body +=
-          "<BR>${product.amount} - ${product.product} - ${(product.amount * product.price).toStringAsFixed(2)}";
-      _total += product.amount * product.price;
+  double get getTotal {
+    var total = 0.0;
+    products.forEach((product) {
+      total += product.price * product.amount;
     });
-    body += "<BR><MEDIUM2>TOTAL: R\$${_total.toStringAsFixed(2)}<BR><BR>";
-    Share.share(body);
+    return total;
+  }
+
+  void shareComanda() {
+    var doc = "<CENTER><BIG>${client.toUpperCase()}";
+    final total = getTotal;
+
+    doc += "<BR>Data : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
+    products.forEach((Product product) {
+      doc +=
+          "<BR>${product.amount} - ${product.name} - R\$${(product.amount * product.price).toStringAsFixed(2)}";
+    });
+    if (taxa) doc += "<BR>Taxa de 15% sobre o valor total - R\$${(total * 0.15).toStringAsFixed(2)}";
+    doc +=
+        "<BR><MEDIUM2>TOTAL: R\$${taxa ? (total + total * 0.15).toStringAsFixed(2) : getTotal.toStringAsFixed(2)}<BR><BR>";
+    Share.share(doc);
   }
 }
 
 class _ComandaCellState extends State<ComandaCell> {
-  String produtBuffer;
-  double priceBuffer;
-  int amountBuffer;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         ListView.builder(
           padding: EdgeInsets.only(bottom: 96),
-          itemCount: widget.products != null ? widget.products.length : 0,
-          itemBuilder: (BuildContext context, int index) {
-            return Dismissible(
-              onDismissed: (direction) {
-                setState(() {
-                  widget.products.removeAt(index);
-                });
-              },
-              background: Container(
-                color: Colors.grey[200],
-              ),
-              key: UniqueKey(),
-              child: ProductCell(
-                key: UniqueKey(),
-                product: widget.products[index],
-              ),
-            );
-          },
+          itemCount:
+              widget.products.isNotEmpty ? widget.products.length + 1 : 1,
+          itemBuilder: (BuildContext context, int index) =>
+              index < widget.products.length
+                  ? Dismissible(
+                      key: UniqueKey(),
+                      onDismissed: (direction) {
+                        setState(() {
+                          widget.products.removeAt(index);
+                        });
+                      },
+                      background: Container(
+                        color: Colors.grey[200],
+                      ),
+                      child: ProductCell(
+                        key: UniqueKey(),
+                        product: widget.products[index],
+                      ),
+                    )
+                  : ExpansionTile(
+                      key: UniqueKey(),
+                      title: Text(widget.client),
+                      children: <Widget>[
+                        StatefulBuilder(
+                          key: UniqueKey(),
+                          builder: (bctx, setState) => CheckboxListTile(
+                            title: Text("Compra afiançada"),
+                            subtitle:
+                                Text("Cobrar taxa de 15% sobre o valor total"),
+                            value: widget.taxa,
+                            onChanged: (value) {
+                              setState(() {
+                                widget.taxa = value;
+                              });
+                            },
+                          ),
+                        ),
+                        FlatButton.icon(
+                          icon: Icon(Icons.share),
+                          textColor: theme.accentColor,
+                          label: Text("Compartilhar"),
+                          onPressed: () => widget.shareComanda(),
+                        )
+                      ],
+                    ),
         ),
         Positioned(
-            bottom: 32,
-            right: 32,
-            child: FloatingActionButton(
-              child: Icon(Icons.plus_one),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext ctx) {
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: Card(
-                            margin: EdgeInsets.only(left: 48, right: 48),
-                            elevation: 8.0,
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "Produto", filled: true),
-                                    onChanged: (String value) {
-                                      produtBuffer = value;
-                                    },
-                                  ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "Preço", filled: true),
-                                    onChanged: (String value) {
-                                      priceBuffer = double.parse(value);
-                                    },
-                                  ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "Quantidade", filled: true),
-                                    onChanged: (String value) {
-                                      amountBuffer = int.parse(value);
-                                    },
-                                  ),
-                                  FlatButton(
-                                      textColor: theme.accentColor,
-                                      child: Text("Adicionar"),
-                                      onPressed: () {
-                                        if (produtBuffer != null &&
-                                            priceBuffer != null &&
-                                            amountBuffer != null) {
-                                          setState(() {
-                                            widget.products.add(Product(
-                                                produtBuffer,
-                                                priceBuffer,
-                                                amountBuffer));
-                                            produtBuffer = null;
-                                            priceBuffer = null;
-                                            amountBuffer = null;
-                                            Navigator.pop(context);
-                                          });
-                                        }
-                                      })
-                                ],
-                              ),
-                            )),
-                      );
-                    });
-              },
-            ))
+          bottom: 32,
+          right: 32,
+          child: FloatingActionButton(
+            child: Icon(Icons.plus_one),
+            onPressed: () {
+              createProduct(context, (Product product) {
+                setState(() {
+                  widget.products.add(product);
+                });
+              });
+            },
+          ),
+        )
       ],
     );
   }

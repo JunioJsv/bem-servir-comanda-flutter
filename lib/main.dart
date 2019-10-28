@@ -5,17 +5,18 @@ import 'comanda_cell.dart';
 
 var theme =
     ThemeData(primaryColor: Colors.green, accentColor: Colors.pinkAccent);
-var title = "Comanda";
-var comandas = new List<ComandaCell>();
-var currentPage = 0;
+var _title = "Comanda";
+var _comandas = <ComandaCell>[];
+var _currentPage = 0;
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: title,
-    theme: theme,
-    home: Comanda(),
-  ));
+  runApp(
+    MaterialApp(
+      title: _title,
+      theme: theme,
+      home: Comanda(),
+    ),
+  );
 }
 
 class Comanda extends StatefulWidget {
@@ -28,94 +29,48 @@ class _ComandaState extends State<Comanda> {
 
   @override
   Widget build(BuildContext context) {
-    title = comandas.length > 0 ? comandas[currentPage].client : "Comanda";
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text(title),
+        title: Text(_title),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: comandas.length > 0
-                ? () {
-                    comandas[currentPage].share();
-                  }
-                : null,
-          ),
           IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext ctx) {
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: Card(
-                          margin: EdgeInsets.only(left: 48, right: 48),
-                          elevation: 8.0,
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                TextField(
-                                  onChanged: (String value) {
-                                    clientBuffer = value;
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: "Cliente", filled: true),
-                                ),
-                                FlatButton(
-                                    textColor: theme.accentColor,
-                                    child: Text("Adicionar"),
-                                    onPressed: () {
-                                      if (clientBuffer != null &&
-                                          clientBuffer.isNotEmpty) {
-                                        setState(() {
-                                          comandas.add(ComandaCell(
-                                            key: UniqueKey(),
-                                            client: clientBuffer,
-                                          ));
-                                          clientBuffer = null;
-                                          currentPage = comandas.length - 1;
-                                          Navigator.pop(context);
-                                        });
-                                      }
-                                    })
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    });
+                createComandaCell(context, (comandaCell) {
+                  setState(() {
+                    _comandas.add(comandaCell);
+                    _currentPage = _comandas.length - 1;
+                  });
+                });
               }),
           IconButton(
               icon: Icon(Icons.remove),
-              onPressed: comandas.length > 0
+              onPressed: _comandas.isNotEmpty
                   ? () {
                       setState(() {
-                        comandas.remove(comandas[currentPage]);
-                        if (currentPage > 0)
-                          currentPage = comandas.length - 1 < currentPage
-                              ? currentPage - 1
-                              : currentPage;
+                        _comandas.remove(_comandas[_currentPage]);
+                        if (_currentPage > 0)
+                          _currentPage = _comandas.length - 1 < _currentPage
+                              ? _currentPage - 1
+                              : _currentPage;
                       });
                     }
-                  : null)
+                  : null),
         ],
       ),
-      body: comandas.length > 0
+      body: _comandas.isNotEmpty
           ? Stack(children: [
               PageView(
                 key: UniqueKey(),
                 controller: PageController(
-                  initialPage: currentPage,
+                  initialPage: _currentPage,
                 ),
-                children: comandas,
-                onPageChanged: (int page) {
+                children: _comandas,
+                onPageChanged: (page) {
                   setState(() {
-                    currentPage = page;
+                    _currentPage = page;
                   });
                 },
               ),
@@ -124,8 +79,8 @@ class _ComandaState extends State<Comanda> {
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: DotsIndicator(
-                    dotsCount: comandas.length,
-                    position: currentPage,
+                    dotsCount: _comandas.length,
+                    position: _currentPage,
                     decorator: DotsDecorator(activeColor: theme.accentColor),
                   ),
                 ),
