@@ -17,49 +17,48 @@ void createProduct(BuildContext buildContext, Function(Product) callBack) {
 
   showDialog(
     context: buildContext,
-    builder: (context) => Align(
-      alignment: Alignment.topCenter,
-      child: Card(
-        margin: EdgeInsets.only(left: 48, right: 48),
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(hintText: "Produto", filled: true),
-                onChanged: (input) {
-                  name = input;
-                },
-              ),
-              TextField(
-                decoration: InputDecoration(hintText: "Preço", filled: true),
-                onChanged: (input) {
-                  price = double.parse(input);
-                },
-              ),
-              TextField(
-                decoration:
-                    InputDecoration(hintText: "Quantidade", filled: true),
-                onChanged: (input) {
-                  amount = int.parse(input);
-                },
-              ),
-              FlatButton(
-                onPressed: () {
-                  if (name != null && price != null && amount != null) {
-                    callBack(Product(name, price, amount));
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(
-                  "Adicionar",
-                  style: TextStyle(color: theme.accentColor),
-                ),
-              ),
-            ],
+    builder: (context) => Dialog(
+      child: ListView(
+        padding: EdgeInsets.all(8.0),
+        shrinkWrap: true,
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.add_shopping_cart),
+            title: Text("Adicionar produto"),
           ),
-        ),
+          TextField(
+            decoration: InputDecoration(hintText: "Produto", filled: true),
+            onChanged: (input) {
+              name = input;
+            },
+          ),
+          TextField(
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "Preço", filled: true),
+            onChanged: (input) {
+              price = double.parse(input);
+            },
+          ),
+          TextField(
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: "Quantidade", filled: true),
+            onChanged: (input) {
+              amount = int.parse(input);
+            },
+          ),
+          FlatButton(
+            onPressed: () {
+              if (name != null && price != null && amount != null) {
+                callBack(Product(name, price, amount));
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              "Adicionar",
+              style: TextStyle(color: theme.accentColor),
+            ),
+          ),
+        ],
       ),
     ),
   );

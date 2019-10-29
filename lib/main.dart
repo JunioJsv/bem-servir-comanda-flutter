@@ -1,10 +1,15 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'comanda_cell.dart';
 
-var theme =
-    ThemeData(primaryColor: Colors.green, accentColor: Colors.pinkAccent);
+var theme = ThemeData(
+  primaryColor: Colors.blue,
+  primaryColorDark: Colors.blue[600],
+  accentColor: Colors.pinkAccent,
+);
+final native = MethodChannel("main_channel");
 var _title = "Comanda";
 var _comandas = <ComandaCell>[];
 var _currentPage = 0;
@@ -29,7 +34,6 @@ class _ComandaState extends State<Comanda> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(

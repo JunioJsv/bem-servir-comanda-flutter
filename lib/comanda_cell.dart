@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:share/share.dart';
 import 'main.dart';
 import 'product_cell.dart';
 
@@ -11,41 +10,39 @@ void createComandaCell(
 
   showDialog(
     context: buildContext,
-    builder: (context) => Align(
-      alignment: Alignment.topCenter,
-      child: Card(
-        margin: EdgeInsets.only(left: 48, right: 48),
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(hintText: "Cliente", filled: true),
-                onChanged: (input) {
-                  client = input;
-                },
-              ),
-              FlatButton(
-                onPressed: () {
-                  if (client.isNotEmpty) {
-                    callBack(
-                      ComandaCell(
-                        key: UniqueKey(),
-                        client: client,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text(
-                  "Adicionar",
-                  style: TextStyle(color: theme.accentColor),
-                ),
-              ),
-            ],
+    builder: (context) => Dialog(
+      child: ListView(
+        padding: EdgeInsets.all(8.0),
+        shrinkWrap: true,
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text("Adicionar comanda"),
           ),
-        ),
+          TextField(
+            decoration: InputDecoration(hintText: "Cliente", filled: true),
+            onChanged: (input) {
+              client = input;
+            },
+          ),
+          FlatButton(
+            onPressed: () {
+              if (client.isNotEmpty) {
+                callBack(
+                  ComandaCell(
+                    key: UniqueKey(),
+                    client: client,
+                  ),
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              "Adicionar",
+              style: TextStyle(color: theme.accentColor),
+            ),
+          ),
+        ],
       ),
     ),
   );
@@ -78,10 +75,14 @@ class ComandaCell extends StatefulWidget {
       doc +=
           "<BR>${product.amount} - ${product.name} - R\$${(product.amount * product.price).toStringAsFixed(2)}";
     });
-    if (taxa) doc += "<BR>Taxa de 15% sobre o valor total - R\$${(total * 0.15).toStringAsFixed(2)}";
+    if (taxa)
+      doc +=
+          "<BR>Taxa de 15% sobre o valor total - R\$${(total * 0.15).toStringAsFixed(2)}";
     doc +=
         "<BR><MEDIUM2>TOTAL: R\$${taxa ? (total + total * 0.15).toStringAsFixed(2) : getTotal.toStringAsFixed(2)}<BR><BR>";
-    Share.share(doc);
+    native.invokeMethod("share", <String, String>{
+      "doc": doc,
+    });
   }
 }
 
