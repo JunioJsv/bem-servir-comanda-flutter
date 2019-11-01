@@ -16,11 +16,17 @@ void createComandaCell(
         shrinkWrap: true,
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text("Adicionar comanda"),
+            title: Text(
+              "Adicionar comanda",
+              style: TextStyle(fontSize: 18.0),
+            ),
           ),
           TextField(
-            decoration: InputDecoration(hintText: "Cliente", filled: true),
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.person_add),
+              hintText: "Cliente",
+              filled: true,
+            ),
             onChanged: (input) {
               client = input;
             },
@@ -114,6 +120,7 @@ class _ComandaCellState extends State<ComandaCell> {
                     )
                   : ExpansionTile(
                       key: UniqueKey(),
+                      leading: Icon(Icons.person),
                       title: Text(widget.client),
                       children: <Widget>[
                         StatefulBuilder(
@@ -143,7 +150,7 @@ class _ComandaCellState extends State<ComandaCell> {
           bottom: 32,
           right: 32,
           child: FloatingActionButton(
-            child: Icon(Icons.plus_one),
+            child: Icon(Icons.add_shopping_cart),
             onPressed: () {
               createProduct(context, (Product product) {
                 setState(() {

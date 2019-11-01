@@ -23,25 +23,37 @@ void createProduct(BuildContext buildContext, Function(Product) callBack) {
         shrinkWrap: true,
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.add_shopping_cart),
-            title: Text("Adicionar produto"),
+            title: Text(
+              "Adicionar produto",
+              style: TextStyle(fontSize: 18.0),
+            ),
           ),
           TextField(
-            decoration: InputDecoration(hintText: "Produto", filled: true),
+            keyboardType: TextInputType.visiblePassword,
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.shopping_cart),
+                hintText: "Produto",
+                filled: true),
             onChanged: (input) {
               name = input;
             },
           ),
           TextField(
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "Preço", filled: true),
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.attach_money),
+                hintText: "Preço",
+                filled: true),
             onChanged: (input) {
               price = double.parse(input);
             },
           ),
           TextField(
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "Quantidade", filled: true),
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.filter_9_plus),
+                hintText: "Quantidade",
+                filled: true),
             onChanged: (input) {
               amount = int.parse(input);
             },
@@ -65,7 +77,7 @@ void createProduct(BuildContext buildContext, Function(Product) callBack) {
 }
 
 class ProductCell extends StatefulWidget {
-  Product product;
+  final Product product;
 
   ProductCell({@required key, this.product}) : super(key: key);
 

@@ -1,39 +1,45 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'comanda_cell.dart';
 
-var theme = ThemeData(
+final theme = ThemeData(
   primaryColor: Colors.blue,
   primaryColorDark: Colors.blue[600],
   accentColor: Colors.pinkAccent,
 );
 final native = MethodChannel("main_channel");
-var _title = "Comanda";
-var _comandas = <ComandaCell>[];
-var _currentPage = 0;
+final _title = "Comanda";
+final _comandas = <ComandaCell>[];
 
-void main() {
-  runApp(
-    MaterialApp(
-      title: _title,
-      theme: theme,
-      home: Comanda(),
-    ),
-  );
-}
+main() => runApp(
+      MaterialApp(
+        title: _title,
+        theme: theme,
+        home: Comanda(),
+      ),
+    );
 
 class Comanda extends StatefulWidget {
   @override
   _ComandaState createState() => _ComandaState();
 }
 
-class _ComandaState extends State<Comanda> {
-  String clientBuffer;
-
+class _ComandaState extends State<Comanda> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
+    final controller = TabController(vsync: this, length: _comandas.length);
+    final tabs = TabBar(
+      tabs: List.generate(
+          _comandas.length,
+          (index) => Container(
+                height: 48,
+                alignment: Alignment.center,
+                child: Text(_comandas[index].client.toUpperCase()),
+              )),
+      controller: controller,
+    );
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -43,57 +49,35 @@ class _ComandaState extends State<Comanda> {
               icon: Icon(Icons.add),
               onPressed: () {
                 createComandaCell(context, (comandaCell) {
-                  setState(() {
-                    _comandas.add(comandaCell);
-                    _currentPage = _comandas.length - 1;
-                  });
+                  setState(() => _comandas.add(comandaCell));
                 });
               }),
           IconButton(
               icon: Icon(Icons.remove),
               onPressed: _comandas.isNotEmpty
                   ? () {
-                      setState(() {
-                        _comandas.remove(_comandas[_currentPage]);
-                        if (_currentPage > 0)
-                          _currentPage = _comandas.length - 1 < _currentPage
-                              ? _currentPage - 1
-                              : _currentPage;
-                      });
+                      if (!controller.indexIsChanging)
+                        setState(() => _comandas.removeAt(controller.index));
                     }
                   : null),
         ],
+        bottom: _comandas.isNotEmpty
+            ? PreferredSize(
+                preferredSize: tabs.preferredSize,
+                child: tabs,
+              )
+            : null,
       ),
       body: _comandas.isNotEmpty
-          ? Stack(children: [
-              PageView(
-                key: UniqueKey(),
-                controller: PageController(
-                  initialPage: _currentPage,
-                ),
-                children: _comandas,
-                onPageChanged: (page) {
-                  setState(() {
-                    _currentPage = page;
-                  });
-                },
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: DotsIndicator(
-                    dotsCount: _comandas.length,
-                    position: _currentPage,
-                    decorator: DotsDecorator(activeColor: theme.accentColor),
-                  ),
-                ),
-              ),
-            ])
+          ? TabBarView(
+              key: UniqueKey(),
+              controller: controller,
+              children: _comandas,
+            )
           : Center(
               child: Text(
                 "Nenhuma comanda",
-                style: TextStyle(fontSize: 38, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 36, color: Colors.grey[600]),
               ),
             ),
     );
