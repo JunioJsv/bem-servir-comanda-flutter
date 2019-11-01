@@ -26,17 +26,21 @@ class Comanda extends StatefulWidget {
 }
 
 class _ComandaState extends State<Comanda> with TickerProviderStateMixin {
+  int initialIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    final controller = TabController(vsync: this, length: _comandas.length);
+    final controller = TabController(
+        vsync: this, length: _comandas.length, initialIndex: initialIndex);
     final tabs = TabBar(
       tabs: List.generate(
-          _comandas.length,
-          (index) => Container(
-                height: 48,
-                alignment: Alignment.center,
-                child: Text(_comandas[index].client.toUpperCase()),
-              )),
+        _comandas.length,
+        (index) => Container(
+          height: 48,
+          alignment: Alignment.center,
+          child: Text(_comandas[index].client.toUpperCase()),
+        ),
+      ),
       controller: controller,
     );
 
@@ -49,15 +53,24 @@ class _ComandaState extends State<Comanda> with TickerProviderStateMixin {
               icon: Icon(Icons.add),
               onPressed: () {
                 createComandaCell(context, (comandaCell) {
-                  setState(() => _comandas.add(comandaCell));
+                  setState(() {
+                    _comandas.add(comandaCell);
+                    initialIndex = _comandas.length - 1;
+                  });
                 });
               }),
           IconButton(
               icon: Icon(Icons.remove),
               onPressed: _comandas.isNotEmpty
                   ? () {
-                      if (!controller.indexIsChanging)
-                        setState(() => _comandas.removeAt(controller.index));
+                      setState(() {
+                        _comandas.removeAt(controller.index);
+                        if (controller.index == 0 ||
+                            controller.index < _comandas.length - 1)
+                          initialIndex = controller.index;
+                        else
+                          initialIndex = _comandas.length - 1;
+                      });
                     }
                   : null),
         ],

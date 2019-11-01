@@ -18,7 +18,6 @@ environment:
 
 dependencies:
   intl: ^0.15.8
-  dots_indicator: ^1.0.0
   flutter:
     sdk: flutter
 
