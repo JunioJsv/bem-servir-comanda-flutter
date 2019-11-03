@@ -1,4 +1,4 @@
-<img align="left" src="https://i.imgur.com/qbianNjl.png">
+<img align="left" src="https://i.imgur.com/bk9KBInl.png">
 
 ### Bem Servir Comanda Flutter, extremamente útil
 Recriação usando Flutter, da comanda eletrônica, para o estabelecimento Bem Servir.
