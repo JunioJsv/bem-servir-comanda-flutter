@@ -10,7 +10,7 @@ class Product {
   Product(this.name, this.price, this.amount);
 }
 
-void createProduct(BuildContext buildContext, Function(Product) callBack) {
+void createProduct(BuildContext buildContext, void Function(Product) callBack) {
   String name;
   double price;
   int amount;
@@ -91,16 +91,12 @@ class _ProductCellState extends State<ProductCell> {
     return ListTile(
       leading: Card(
         child: InkWell(
-          onDoubleTap: () {
-            setState(() {
-              widget.product.amount++;
-            });
-          },
-          onLongPress: () {
-            setState(() {
-              if (widget.product.amount > 1) widget.product.amount--;
-            });
-          },
+          onDoubleTap: () => setState(() {
+            widget.product.amount++;
+          }),
+          onLongPress: () => setState(() {
+            if (widget.product.amount > 1) widget.product.amount--;
+          }),
           child: Container(
             width: 48,
             height: 48,

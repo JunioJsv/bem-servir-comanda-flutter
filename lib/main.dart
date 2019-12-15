@@ -50,27 +50,46 @@ class _ComandaState extends State<Comanda> with TickerProviderStateMixin {
         title: Text(_title),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                createComandaCell(context, (comandaCell) {
-                  setState(() {
-                    _comandas.add(comandaCell);
-                    initialIndex = _comandas.length - 1;
-                  });
-                });
+            icon: Icon(Icons.add),
+            onPressed: () => createComandaCell(
+              context,
+              (comandaCell) => setState(() {
+                _comandas.add(comandaCell);
+                initialIndex = _comandas.length - 1;
               }),
+            ),
+          ),
           IconButton(
               icon: Icon(Icons.remove),
               onPressed: _comandas.isNotEmpty
                   ? () {
-                      setState(() {
-                        _comandas.removeAt(controller.index);
-                        if (controller.index == 0 ||
-                            controller.index < _comandas.length - 1)
-                          initialIndex = controller.index;
-                        else
-                          initialIndex = _comandas.length - 1;
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (bctx) => AlertDialog(
+                          title: Text(
+                              "Excluir ${_comandas[controller.index].client}"),
+                          content:
+                              Text("Você realmente quer excluir essa comanda?"),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () => Navigator.pop(bctx),
+                              child: Text("Não"),
+                            ),
+                            FlatButton(
+                              onPressed: () => setState(() {
+                                _comandas.removeAt(controller.index);
+                                if (controller.index == 0 ||
+                                    controller.index < _comandas.length - 1)
+                                  initialIndex = controller.index;
+                                else
+                                  initialIndex = _comandas.length - 1;
+                                Navigator.pop(bctx);
+                              }),
+                              child: Text("Sim"),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   : null),
         ],
@@ -88,9 +107,19 @@ class _ComandaState extends State<Comanda> with TickerProviderStateMixin {
               children: _comandas,
             )
           : Center(
-              child: Text(
-                "Nenhuma comanda",
-                style: TextStyle(fontSize: 36, color: Colors.grey[600]),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Icon(
+                    Icons.remove_shopping_cart,
+                    size: 80,
+                    color: theme.primaryColor,
+                  ),
+                  Text(
+                    "Nenhuma comanda",
+                    style: TextStyle(fontSize: 36, color: Colors.grey[600]),
+                  ),
+                ],
               ),
             ),
     );

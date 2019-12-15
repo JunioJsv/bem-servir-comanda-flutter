@@ -5,7 +5,7 @@ import 'main.dart';
 import 'product_cell.dart';
 
 void createComandaCell(
-    BuildContext buildContext, Function(ComandaCell) callBack) {
+    BuildContext buildContext, void Function(ComandaCell) callBack) {
   String client;
 
   showDialog(
@@ -55,11 +55,10 @@ void createComandaCell(
 }
 
 class ComandaCell extends StatefulWidget {
-  String client = "";
-  List<Product> products = <Product>[];
-  bool taxa = false;
+  final String client;
+  final List<Product> products = <Product>[];
 
-  ComandaCell({@required key, this.client}) : super(key: key);
+  ComandaCell({@required key, @required this.client}) : super(key: key);
 
   @override
   _ComandaCellState createState() => _ComandaCellState();
@@ -72,20 +71,24 @@ class ComandaCell extends StatefulWidget {
     return total;
   }
 
-  void shareComanda() {
+  void shareComanda(bool tax) {
     var doc = "<CENTER><BIG>${client.toUpperCase()}";
     final total = getTotal;
 
     doc += "<BR>Data : ${DateFormat("dd/MM/yyyy").format(DateTime.now())}";
     products.forEach((Product product) {
+      final name = product.name;
+      final price = product.price;
+      final amount = product.amount;
+
       doc +=
-          "<BR>${product.amount} - ${product.name} - R\$${(product.amount * product.price).toStringAsFixed(2)}";
+          "<BR><BOLD>$amount - $name - R\$${(amount * price).toStringAsFixed(2)}";
     });
-    if (taxa)
+    if (tax)
       doc +=
           "<BR>Taxa de 15% sobre o valor total - R\$${(total * 0.15).toStringAsFixed(2)}";
     doc +=
-        "<BR><MEDIUM2>TOTAL: R\$${taxa ? (total + total * 0.15).toStringAsFixed(2) : getTotal.toStringAsFixed(2)}<BR><BR>";
+        "<BR><BOLD><MEDIUM3>TOTAL: R\$${tax ? (total + total * 0.15).toStringAsFixed(2) : total.toStringAsFixed(2)}<BR><BR>";
     native.invokeMethod("share", <String, String>{
       "doc": doc,
     });
@@ -93,6 +96,8 @@ class ComandaCell extends StatefulWidget {
 }
 
 class _ComandaCellState extends State<ComandaCell> {
+  bool _tax = false;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -105,11 +110,9 @@ class _ComandaCellState extends State<ComandaCell> {
               index < widget.products.length
                   ? Dismissible(
                       key: UniqueKey(),
-                      onDismissed: (direction) {
-                        setState(() {
-                          widget.products.removeAt(index);
-                        });
-                      },
+                      onDismissed: (direction) => setState(() {
+                        widget.products.removeAt(index);
+                      }),
                       background: Container(
                         color: Colors.grey[200],
                       ),
@@ -129,19 +132,17 @@ class _ComandaCellState extends State<ComandaCell> {
                             title: Text("Compra afiançada"),
                             subtitle:
                                 Text("Cobrar taxa de 15% sobre o valor total"),
-                            value: widget.taxa,
-                            onChanged: (value) {
-                              setState(() {
-                                widget.taxa = value;
-                              });
-                            },
+                            value: _tax,
+                            onChanged: (value) => setState(() {
+                              _tax = value;
+                            }),
                           ),
                         ),
                         FlatButton.icon(
                           icon: Icon(Icons.share),
                           textColor: theme.accentColor,
                           label: Text("Compartilhar"),
-                          onPressed: () => widget.shareComanda(),
+                          onPressed: () => widget.shareComanda(_tax),
                         )
                       ],
                     ),
@@ -151,13 +152,12 @@ class _ComandaCellState extends State<ComandaCell> {
           right: 32,
           child: FloatingActionButton(
             child: Icon(Icons.add_shopping_cart),
-            onPressed: () {
-              createProduct(context, (Product product) {
-                setState(() {
-                  widget.products.add(product);
-                });
-              });
-            },
+            onPressed: () => createProduct(
+              context,
+              (Product product) => setState(() {
+                widget.products.add(product);
+              }),
+            ),
           ),
         )
       ],
