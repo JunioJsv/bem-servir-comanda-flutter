@@ -11,8 +11,9 @@ class App extends StatelessWidget {
         child: Consumer<AppModel>(
           builder: (pctx, app, __) { // [pctx] Provider<AppModel> Context
             return DefaultTabController(
+              initialIndex: app.forceTabTo,
+              key: UniqueKey(),
               length: app.comandas.length,
-              initialIndex: app.tabsInitOn,
               child: Builder(
                 builder: (bctx) => Scaffold( // [bctx] BuildContext with DefaultTabController
                   resizeToAvoidBottomPadding: false,
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
                     ],
                     bottom: app.comandas.isNotEmpty
                         ? TabBar(
+                            key: UniqueKey(),
                             tabs: List.generate(
                               app.comandas.length,
                               (index) => Container(

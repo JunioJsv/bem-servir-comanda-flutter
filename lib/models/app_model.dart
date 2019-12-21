@@ -6,7 +6,7 @@ class AppModel extends ChangeNotifier {
   final String title;
   final _comandas = List<ComandaModel>();
   final native = MethodChannel("main_channel");
-  int tabsInitOn = 0;
+  int forceTabTo = 0;
 
   AppModel(this.title);
 
@@ -30,6 +30,7 @@ class AppModel extends ChangeNotifier {
           FlatButton(
             onPressed: () {
               if (client.isNotEmpty) {
+                forceTabTo = _comandas.length;
                 this
                   .._comandas.add(ComandaModel(client))
                   ..notifyListeners();
@@ -59,6 +60,7 @@ class AppModel extends ChangeNotifier {
             ),
             FlatButton(
               onPressed: () {
+                forceTabTo = index < _comandas.length - 1 ? index : index - 1;
                 this
                   .._comandas.removeAt(index)
                   ..notifyListeners();
