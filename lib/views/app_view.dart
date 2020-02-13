@@ -11,7 +11,7 @@ class App extends StatelessWidget {
         child: Consumer<AppModel>(
           builder: (pctx, app, __) { // [pctx] Provider<AppModel> Context
             return DefaultTabController(
-              initialIndex: app.forceTabTo,
+              initialIndex: app.forceTabTo >= 0 ? app.forceTabTo : 0,
               key: UniqueKey(),
               length: app.comandas.length,
               child: Builder(

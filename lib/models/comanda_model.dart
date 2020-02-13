@@ -56,8 +56,8 @@ class ComandaModel extends ChangeNotifier {
       context: context,
       builder: (bctx) => AlertDialog(
         title: Text('Criar produto'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
+        content: ListView(
+          shrinkWrap: true,
           children: <Widget>[
             TextField(
               keyboardType: TextInputType.visiblePassword,

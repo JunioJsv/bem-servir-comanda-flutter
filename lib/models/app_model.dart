@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 class AppModel extends ChangeNotifier {
   final String title;
   final _comandas = List<ComandaModel>();
-  final native = MethodChannel("main_channel");
+  final native = MethodChannel('main_channel');
   int forceTabTo = 0;
 
   AppModel(this.title);
@@ -66,7 +66,7 @@ class AppModel extends ChangeNotifier {
                   ..notifyListeners();
                 Navigator.pop(bctx);
               },
-              child: Text("SIM"),
+              child: Text('SIM'),
             ),
           ],
         ),
