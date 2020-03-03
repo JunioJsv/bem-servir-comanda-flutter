@@ -22,7 +22,7 @@ class App extends StatelessWidget {
                     actions: <Widget>[
                       IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () => app.newComanda(pctx),
+                        onPressed: () => app.createComanda(pctx),
                       ),
                       IconButton(
                           icon: Icon(Icons.remove),

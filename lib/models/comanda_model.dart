@@ -41,7 +41,8 @@ class ComandaModel extends ChangeNotifier {
           '<BR><BOLD>$amount - $name - R\$${(amount * price).toStringAsFixed(2)}';
     });
     if (tax) comanda += '<BR>[!] Taxa de 15% sobre o valor total';
-    comanda += '<BR><BOLD><MEDIUM3>TOTAL: R\$${total.toStringAsFixed(2)}<BR><BR>';
+    comanda +=
+        '<BR><BOLD><MEDIUM3>TOTAL: R\$${total.toStringAsFixed(2)}<BR><BR>';
     Provider.of<AppModel>(context)
         .native
         .invokeMethod('share', <String, String>{
@@ -55,9 +56,13 @@ class ComandaModel extends ChangeNotifier {
     showDialog(
       context: context,
       builder: (bctx) => AlertDialog(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 20
+        ),
         title: Text('Criar produto'),
-        content: ListView(
-          shrinkWrap: true,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextField(
               keyboardType: TextInputType.visiblePassword,
@@ -68,24 +73,36 @@ class ComandaModel extends ChangeNotifier {
               ),
               onChanged: (input) => name = input,
             ),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.attach_money),
-                hintText: 'Preço',
-                filled: true,
-              ),
-              onChanged: (input) => price = double.parse(input),
-            ),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.filter_9_plus),
-                hintText: 'Quantidade',
-                filled: true,
-              ),
-              onChanged: (input) => amount = int.parse(input),
-            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: TextField(
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.attach_money),
+                      hintText: 'Preço',
+                      filled: true,
+                    ),
+                    onChanged: (input) => price = double.parse(input),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: TextField(
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.filter_9_plus),
+                      hintText: 'Quantidade',
+                      filled: true,
+                    ),
+                    onChanged: (input) => amount = int.parse(input),
+                  ),
+                )
+              ],
+            )
           ],
         ),
         actions: <Widget>[
@@ -108,7 +125,7 @@ class ComandaModel extends ChangeNotifier {
     );
   }
 
-  void removeProduct(int index) => this
+  void deleteProduct(int index) => this
     .._products.removeAt(index)
     ..notifyListeners();
 }

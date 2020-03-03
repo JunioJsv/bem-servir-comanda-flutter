@@ -12,7 +12,7 @@ class AppModel extends ChangeNotifier {
 
   List<ComandaModel> get comandas => _comandas;
 
-  void newComanda(BuildContext context) {
+  void createComanda(BuildContext context) {
     String client;
     showDialog(
       context: context,

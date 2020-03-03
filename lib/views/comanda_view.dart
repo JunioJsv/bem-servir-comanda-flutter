@@ -25,7 +25,7 @@ class Comanda extends StatelessWidget {
                 itemBuilder: (_, index) => index < comanda.products.length
                     ? Dismissible(
                         key: UniqueKey(),
-                        onDismissed: (_) => comanda.removeProduct(index),
+                        onDismissed: (_) => comanda.deleteProduct(index),
                         background: Container(
                           color: Colors.grey[200],
                         ),
