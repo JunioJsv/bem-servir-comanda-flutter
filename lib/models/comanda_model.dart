@@ -1,7 +1,5 @@
-import 'package:bem_servir_comanda/main.dart';
 import 'package:bem_servir_comanda/models/app_model.dart';
 import 'package:bem_servir_comanda/models/product_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +14,7 @@ class ComandaModel extends ChangeNotifier {
   ComandaModel(this.client);
 
   bool get tax => _tax;
+
   List<ProductModel> get products => _products;
 
   double get total {
@@ -50,47 +49,63 @@ class ComandaModel extends ChangeNotifier {
     });
   }
 
-  void createProduct(BuildContext context) {
+  PageRoute createPage(Widget child) {
+    return PageRouteBuilder(
+      pageBuilder: (context, _, __) => child,
+      transitionsBuilder: (context, animation, _, child) {
+        final slide = animation.drive(
+          Tween(begin: Offset(0.0, 1.0), end: Offset.zero),
+        );
+        return SlideTransition(position: slide, child: child);
+      },
+    );
+  }
+
+  Widget createProduct() {
     var name, price, amount;
 
-    showDialog(
-      context: context,
-      builder: (bctx) => AlertDialog(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 20
+    return Builder(
+      builder: (bctx) => Scaffold(
+        appBar: AppBar(
+          title: Text("Adicionar produto"),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(bctx).pop()),
         ),
-        title: Text('Criar produto'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextField(
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.shopping_cart),
-                hintText: 'Produto',
-                filled: true,
-              ),
-              onChanged: (input) => name = input,
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: TextField(
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.attach_money),
-                      hintText: 'Preço',
-                      filled: true,
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 16.0),
+                    child: TextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.shopping_cart),
+                        hintText: 'Produto',
+                        filled: true,
+                      ),
+                      onChanged: (input) => name = input,
                     ),
-                    onChanged: (input) => price = double.parse(input),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: TextField(
+                  Container(
+                    margin: EdgeInsets.only(bottom: 16.0),
+                    child: TextField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.attach_money),
+                        hintText: 'Preço',
+                        filled: true,
+                      ),
+                      onChanged: (input) => price = double.parse(input),
+                    ),
+                  ),
+                  TextField(
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(
@@ -100,27 +115,26 @@ class ComandaModel extends ChangeNotifier {
                     ),
                     onChanged: (input) => amount = int.parse(input),
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              if (name != null && price != null && amount != null) {
-                this
-                  .._products.add(ProductModel(name, price, amount))
-                  ..notifyListeners();
-                Navigator.pop(bctx);
-              }
-            },
-            child: Text(
-              'ADICIONAR',
-              style: TextStyle(color: theme.accentColor),
-            ),
+                ],
+              ),
+              FlatButton(
+                textColor: Theme.of(bctx).accentColor,
+                onPressed: () {
+                  if (name != null && price != null && amount != null) {
+                    this
+                      .._products.add(ProductModel(name, price, amount))
+                      ..notifyListeners();
+                    Navigator.pop(bctx);
+                  }
+                },
+                child: Text(
+                  'ADICIONAR',
+                  style: TextStyle(color: Theme.of(bctx).accentColor),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -28,6 +28,7 @@ class AppModel extends ChangeNotifier {
         ),
         actions: <Widget>[
           FlatButton(
+            textColor: Theme.of(bctx).accentColor,
             onPressed: () {
               if (client.isNotEmpty) {
                 forceTabTo = _comandas.length;
@@ -55,10 +56,12 @@ class AppModel extends ChangeNotifier {
           ),
           actions: <Widget>[
             FlatButton(
+              textColor: Theme.of(bctx).accentColor,
               onPressed: () => Navigator.pop(bctx),
               child: Text('NÃO'),
             ),
             FlatButton(
+              textColor: Theme.of(bctx).accentColor,
               onPressed: () {
                 forceTabTo = index < _comandas.length - 1 ? index : index - 1;
                 this

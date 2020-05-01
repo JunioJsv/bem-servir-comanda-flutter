@@ -1,4 +1,3 @@
-import 'package:bem_servir_comanda/main.dart';
 import 'package:bem_servir_comanda/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +27,7 @@ class Product extends StatelessWidget {
                     '${product.amount}',
                     style: TextStyle(
                       fontSize: 24,
-                      color: theme.accentColor,
+                      color: Theme.of(pctx).accentColor,
                     ),
                   ),
                 ),
@@ -42,11 +41,11 @@ class Product extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "R\$",
-                  style: TextStyle(fontSize: 16, color: theme.primaryColor),
+                  style: TextStyle(fontSize: 16, color: Theme.of(pctx).primaryColor),
                 ),
                 Text(
                   '${(product.price * product.amount).toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 32, color: theme.primaryColor),
+                  style: TextStyle(fontSize: 32, color: Theme.of(pctx).primaryColor),
                 )
               ],
             ),

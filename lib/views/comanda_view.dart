@@ -1,4 +1,3 @@
-import 'package:bem_servir_comanda/main.dart';
 import 'package:bem_servir_comanda/models/comanda_model.dart';
 import 'package:bem_servir_comanda/views/product_view.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,7 @@ class Comanda extends StatelessWidget {
   Comanda({key, this.model}) : super(key: key);
 
   @override
-  Widget build(bctx) =>
-      ChangeNotifierProvider<ComandaModel>.value(
+  Widget build(bctx) => ChangeNotifierProvider<ComandaModel>.value(
         value: model,
         child: Stack(
           children: <Widget>[
@@ -37,7 +35,8 @@ class Comanda extends StatelessWidget {
                     : ExpansionTile(
                         key: UniqueKey(),
                         initiallyExpanded: comanda.infoExpanded,
-                        onExpansionChanged: (value) => comanda.infoExpanded = value,
+                        onExpansionChanged: (value) =>
+                            comanda.infoExpanded = value,
                         leading: Icon(Icons.person),
                         title: Text(comanda.client),
                         children: <Widget>[
@@ -55,18 +54,20 @@ class Comanda extends StatelessWidget {
                               Text(
                                 "R\$",
                                 style: TextStyle(
-                                    fontSize: 16, color: theme.primaryColor),
+                                    fontSize: 16,
+                                    color: Theme.of(pctx).primaryColor),
                               ),
                               Text(
                                 '${comanda.total.toStringAsFixed(2)}',
                                 style: TextStyle(
-                                    fontSize: 38, color: theme.primaryColor),
+                                    fontSize: 38,
+                                    color: Theme.of(pctx).primaryColor),
                               )
                             ],
                           ),
                           FlatButton.icon(
                             icon: Icon(Icons.share),
-                            textColor: theme.accentColor,
+                            textColor: Theme.of(pctx).accentColor,
                             label: Text('COMPARTILHAR'),
                             onPressed: () => comanda.shareComanda(pctx),
                           )
@@ -78,8 +79,13 @@ class Comanda extends StatelessWidget {
               bottom: 32,
               right: 32,
               child: FloatingActionButton(
-                  child: Icon(Icons.add_shopping_cart),
-                  onPressed: () => this.model.createProduct(bctx)),
+                child: Icon(Icons.add_shopping_cart),
+                onPressed: () {
+                  Navigator.of(bctx).push(
+                    model.createPage(model.createProduct())
+                  );
+                },
+              ),
             ),
           ],
         ),

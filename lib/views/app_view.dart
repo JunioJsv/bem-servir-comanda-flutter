@@ -1,4 +1,3 @@
-import 'package:bem_servir_comanda/main.dart';
 import 'package:bem_servir_comanda/models/app_model.dart';
 import 'package:bem_servir_comanda/views/comanda_view.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +65,7 @@ class App extends StatelessWidget {
                               Icon(
                                 Icons.remove_shopping_cart,
                                 size: 80,
-                                color: theme.primaryColor,
+                                color: Theme.of(pctx).primaryColor,
                               ),
                               Text(
                                 'Nenhuma comanda',
